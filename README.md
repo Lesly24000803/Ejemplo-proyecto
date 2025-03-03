@@ -35,7 +35,7 @@ ini
 Copiar
 Editar
 MONGO_URI=mongodb+srv://<usuario>:<contraseña>@cluster.mongodb.net/habitosDB
-PORT=5000
+PORT=3001
 ▶️ Ejecución del proyecto
 Iniciar el servidor backend
 bash
@@ -43,7 +43,7 @@ Copiar
 Editar
 cd backend
 npm run dev
-El backend correrá en http://localhost:5000.
+El backend correrá en http://localhost:3001.
 
 📌 Endpoints disponibles
 Método	Ruta	Descripción
