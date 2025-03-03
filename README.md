@@ -34,7 +34,7 @@ Crea un archivo .env en la carpeta backend y agrega lo siguiente:
 ini
 Copiar
 Editar
-MONGO_URI=mongodb+srv://<usuario>:<contraseña>@cluster.mongodb.net/habitosDB
+MONGO_URI=mongodb+srv://mc8750663:Contraseña@cluster0.kd5fs.mongodb.net/habitosApp?retryWrites=true&w=majority&appName=Cluster0
 PORT=3001
 ▶️ Ejecución del proyecto
 Iniciar el servidor backend
