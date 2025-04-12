@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const bcryot = require('bcrypt');
-const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const user = require('../modelo/user');
+const user = require('../modelo/user');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -10,44 +11,43 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/register', async function(req, res, next){
-  try{
-    const{username, password}= req.body;
-  
-    const salt = await bcrypt.gen.Salt(10);
+  try {
+    const {username, password} = req.body;
+    const salt =  await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const newUser= new User({username, password: hashedPassword});
-    await newYser.save();
-
-    res.status(201).json({message: "Usuario registrado correctamente"});
-  }catch(error){
+    const newUser = new user({username, password: hashedPassword});
+    await newUser.save();
+    res.status(201).json({ message: "El usuario se ha registrado correctamente" });
+  }catch(error) {
     console.log(error);
-  res.status(500).json({error:"Error en el registro", "description":error.toString()});
+    res.status(500).json({error: "Error en el registro", "description":error.toString()});
   }
 })
-router.post('/login', async function (req, res, next) {
+
+router.post('/login', async function(req, res, net){
   try {
-    const { username, password } = req.body;
-
-    const user = await User.findOne({ username });
-    if (!user) return res.status(400).json({ error: "Usuario no encontrado" });
-
+    const {username, password} = req.body;
+    
+    const user = await user.findOne({username});
+    if(!user) return res.status(400).json({error: "Usuario no encontrado"});
+    
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: "Contraseña incorrecta" });
-
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-    res.json('habitToken', token,{
+    if(!isMatch) return res.status(400).json({error: "Contraseña incorrecta"});
+    
+    const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
+    
+    res.cookie('habitToken', token, {
       httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === "production",
       sameSite: 'Strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-
+      maxAge: 7 * 24 * 60 * 60 * 1000
     })
-    res.json ({message: " Inicios de sesión exitoso", token});
-  } catch (error) {
-    res.status(500).json({ error: "Error en el login", description: error.toString() });
+    res.json({ message: "Inicio de sesion exitoso", token });
+  }catch(error) {
+    console.log(error);
+    res.status(500).json({error: "Error en el login", "description":error.toString()}); 
   }
-});
+})
 
 module.exports = router;

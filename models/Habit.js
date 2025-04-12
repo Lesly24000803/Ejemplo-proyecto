@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');   
+const mongoose = require('mongoose');
 const habitSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -10,9 +10,9 @@ const habitSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: Date.now   
+        default: Date.now
     },
-    lastUpdated: {
+    lastUpdate: {
         type: Date,
         default: Date.now
     },
@@ -21,18 +21,17 @@ const habitSchema = new mongoose.Schema({
         default: Date.now
     },
     days: {
-        type: [String],
+        type: Number,
         default: 1
     },
-    staredAt: {
+    startedAt: {
         type: Date,
         default: Date.now
     },
-    userId:{
+    userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
+        ref: 'User'
     }
-}); 
 
-module.exports = mongoose.model('Habit', habitSchema);  
+})
+module.exports = mongoose.model('habit', habitSchema);

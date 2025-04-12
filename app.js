@@ -9,10 +9,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
-app.use(cros({
-  origin: 'http://localhost:3000',
-  credentials: true
-
+app.use(cors({
+  origin:'http://localhost:3000',
+  Credentials: true
 }))
 
 // view engine setup
