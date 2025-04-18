@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const Habit = require('../modelo/habit');
+const Habit = require('../models/Habit');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
