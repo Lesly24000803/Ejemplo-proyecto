@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const Habit = require('../modelo/habit');
+const Habit = require('../models/Habit');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
@@ -26,22 +26,19 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/habits', authenticateToken, async(req, res) => {
+router.get('/habits', authenticateToken, async(req, res,) => {
   try{
-    let userId = req.user && req.user.userId ? req.user.userId : res.status(500).json({ message: "Error al obtener habits" });
-    const habits = await Habit.find({'userId': new mongoose.Types.ObjectId(userId)});
+    const habits = await Habit.find();
     res.json(habits);
   }catch(err){
     res.status(500).json({ message: 'Error al obtener habitos' })
   }
 });
 
-router.post('/habits', authenticateToken, async(req, res) => {
+router.post('/habits', async(req, res) => {
   try{
     const {title, description} = req.body;
-    let userId = req.user && req.user.userId ? req.user.userId : res.status(500).json({ message: "Error al agregar habito" });
-    userId = new mongoose.Types.ObjectId(userId);
-    const habit = new Habit({title, description, userId});
+    const habit = new Habit({title, description});
     await habit.save();
     res.json(habit);
   }catch(err){
@@ -49,7 +46,7 @@ router.post('/habits', authenticateToken, async(req, res) => {
   }
 });
 
-router.delete('/habits/:id', authenticateToken, async (req,res) => {
+router.delete('/habits/:id', async (req,res) => {
   try{
     await Habit.findByIdAndDelete(req.params.id);
     res.json({ message: 'Habito eliminado'});
@@ -58,7 +55,7 @@ router.delete('/habits/:id', authenticateToken, async (req,res) => {
   }
 });
 
-router.patch('/habits/markasdone/:id', authenticateToken, async (req , res) => {
+router.patch('/habits/markasdone/:id', async (req , res) => {
   try{
     const habit = await Habit.findById(req.params.id);
     habit.lastDone = new Date();
